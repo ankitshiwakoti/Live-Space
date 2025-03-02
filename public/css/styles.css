@@ -1,0 +1,10 @@
+/* public/css/styles.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* public/css/styles.css */ 
+ /* Now, let’s run the following command to compile the CSS file: 
+ npx tailwindcss-cli@latest build public/css/styles.css -o public/css/output.css 
+ The above command will compile the CSS file and generate a new file named  output.css  in the  public/css  directory. 
+ Now, let’s include the  output.css  file in the  index.html  file: 
+ <!DOCTYPE html> */

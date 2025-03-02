@@ -1,11 +1,35 @@
 import express from 'express';
-import { getAllUsers, getUserById, createUser, deleteUser } from '../controller/RealEstateUserController.js';
+import { createClient,createAgent, loginUser, dashboard } from '../controller/RealEstateUserController.js';
+import verifyToken from '../middleware/authMiddleWare.js';
 
 const router = express.Router();
 
-router.get('/', getAllUsers);      // Get all users
-router.get('/:id', getUserById);   // Get user by ID
-router.post('/', createUser);      // Create a new user
-router.delete('/:id', deleteUser); // Delete user
+// Render login and signup pages
+router.get('/login', (req, res) => {
+    res.render('login');
+});
+
+router.get('/signup', (req, res) => {
+    res.render('signup');
+});
+
+router.get('/signupagent', (req, res) => {
+    res.render('signupagent');
+});
+
+// Login route to handle user login
+router.post('/login', loginUser);
+
+// Dashboard route, uses token verification middleware
+router.get('/dashboard', verifyToken, dashboard);
+
+// Profile route accessible only with a valid token
+router.get('/profile', verifyToken, (req, res) => {
+    res.json({ message: 'Welcome to your profile', user: req.user });
+});
+
+// User creation (signup route)
+router.post('/signupagent', createAgent);
+router.post('/signupclient', createClient);
 
 export default router;
