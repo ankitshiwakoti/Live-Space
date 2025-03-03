@@ -1,4 +1,4 @@
-import { RealEstateUser,Property,PropertyAgent } from '../models/index.js';
+import { RealEstateUser,Property,PropertyAgent,PropertyBuyer, Location } from '../models/index.js';
 
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -68,7 +68,7 @@ export const createClient = async (req, res) => {
 
         // If the user is an agent, create a PropertyAgent record
         if (Role === 'client') {
-            await PropertyAgent.create({
+            await PropertyBuyer.create({
                 BuyerID: newUser.UserID,
                 ContactNumber,
                 PreferredContactMethod
@@ -115,7 +115,7 @@ export const loginUser = async (req, res) => {
         if (user.Role === 'agent') {
             return res.redirect('/api/users/dashboard');  // Redirect to agent's dashboard
         } else {
-            return res.redirect('/dashboard');  // Redirect to regular user's dashboard
+            return res.redirect('/user/dashboard');  // Redirect to regular user's dashboard
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -139,7 +139,17 @@ export const dashboard = async (req, res) => {
         console.log('User ID:', decoded);
 
         // Fetch properties belonging to the user
-        const properties = await Property.findAll({ where: { AgentID: userId } });
+        // const properties = await Property.findAll({ where: { AgentID: userId } });
+
+        const properties = await Property.findAll({
+            where: { AgentID: userId },
+            include: [{
+                model: Location,
+                attributes: ['LocationID', 'City', 'State', 'Country'] // Modify based on your Location model attributes
+            }]
+        });
+
+        console.log('Properties ayo hi:', properties);
 
         // Render the dashboard view with the user's properties
         res.render('dashboard', { properties });

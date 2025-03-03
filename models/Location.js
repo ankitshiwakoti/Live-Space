@@ -9,7 +9,8 @@ const Location = sequelize.define('Location', {
     City: { type: DataTypes.STRING, allowNull: false },
     State: { type: DataTypes.STRING },
     Country: { type: DataTypes.STRING, allowNull: false },
-    ZipCode: { type: DataTypes.STRING }
+    ZipCode: { type: DataTypes.STRING },
+    
 }, { timestamps: false });
 
 export default Location;

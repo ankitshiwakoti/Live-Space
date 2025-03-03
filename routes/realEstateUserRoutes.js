@@ -1,6 +1,7 @@
 import express from 'express';
 import { createClient,createAgent, loginUser, dashboard } from '../controller/RealEstateUserController.js';
 import verifyToken from '../middleware/authMiddleWare.js';
+import { validateAgentSignup } from '../middleware/validationMiddleware.js';
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.get('/profile', verifyToken, (req, res) => {
 });
 
 // User creation (signup route)
-router.post('/signupagent', createAgent);
+router.post('/signupagent',validateAgentSignup, createAgent);
 router.post('/signupclient', createClient);
 
 export default router;

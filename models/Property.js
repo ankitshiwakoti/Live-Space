@@ -10,7 +10,8 @@ const Property = sequelize.define('Property', {
     Description: { type: DataTypes.TEXT },
     Price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     Type: { type: DataTypes.ENUM('house', 'apartment', 'condo', 'commercial'), allowNull: false },
-    ImageURL: { type: DataTypes.STRING }
+    ImageURL: { type: DataTypes.STRING },
+    LocationID: { type: DataTypes.INTEGER, allowNull: false, references: { model: Location, key: 'LocationID' } } // Self-referencing foreign key
 }, { timestamps: true });
 
 Property.belongsTo(Location, { foreignKey: 'LocationID' });

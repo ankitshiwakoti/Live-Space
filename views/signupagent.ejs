@@ -11,34 +11,113 @@
     <div class="flex justify-center items-center h-screen">
         <div class="bg-white p-8 rounded-lg shadow-lg w-96">
             <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-            <form action="/api/users/signupagent" method="POST">
+            <form id="signupForm" action="/api/users/signupagent" method="POST">
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-600">Name</label>
                     <input type="text" id="name" name="Name" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                    <p class="text-red-500 text-sm mt-1 hidden" id="nameError"></p>
                 </div>
+
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-600">Email</label>
                     <input type="email" id="email" name="Email" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                    <p class="text-red-500 text-sm mt-1 hidden" id="emailError"></p>
                 </div>
+
                 <div class="mb-4">
                     <label for="password" class="block text-sm font-medium text-gray-600">Password</label>
                     <input type="password" id="password" name="Password" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                    <p class="text-red-500 text-sm mt-1 hidden" id="passwordError"></p>
                 </div>
+
                 <div class="mb-4">
                     <label for="LicenseNumber" class="block text-sm font-medium text-gray-600">Agent License Number</label>
                     <input type="text" id="LicenseNumber" name="LicenseNumber" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                    <p class="text-red-500 text-sm mt-1 hidden" id="licenseError"></p>
                 </div>
 
                 <div class="mb-4">
                     <label for="ContactNumber" class="block text-sm font-medium text-gray-600">Phone</label>
                     <input type="number" id="ContactNumber" name="ContactNumber" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                    <p class="text-red-500 text-sm mt-1 hidden" id="contactError"></p>
                 </div>
     
                 <input type="hidden" name="Role" value="agent">
+
                 <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Sign Up</button>
             </form>
+
             <p class="mt-4 text-center">Already have an account? <a href="/api/users/login" class="text-blue-500">Login</a></p>
         </div>
     </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission until validation is complete
+            
+            let isValid = true;
+
+            // Name validation
+            const name = document.getElementById('name').value.trim();
+            const nameError = document.getElementById('nameError');
+            if (name.length < 3) {
+                nameError.textContent = 'Name must be at least 3 characters long.';
+                nameError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                nameError.classList.add('hidden');
+            }
+
+            // Email validation
+            const email = document.getElementById('email').value.trim();
+            const emailError = document.getElementById('emailError');
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!emailPattern.test(email)) {
+                emailError.textContent = 'Enter a valid email address.';
+                emailError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                emailError.classList.add('hidden');
+            }
+
+            // Password validation
+            const password = document.getElementById('password').value;
+            const passwordError = document.getElementById('passwordError');
+            if (password.length < 6) {
+                passwordError.textContent = 'Password must be at least 6 characters.';
+                passwordError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                passwordError.classList.add('hidden');
+            }
+
+            // License Number validation
+            const license = document.getElementById('LicenseNumber').value.trim();
+            const licenseError = document.getElementById('licenseError');
+            if (license.length < 6) {
+                licenseError.textContent = 'License Number must be at least 6 characters.';
+                licenseError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                licenseError.classList.add('hidden');
+            }
+
+            // Contact Number validation
+            const contact = document.getElementById('ContactNumber').value.trim();
+            const contactError = document.getElementById('contactError');
+            if (contact.length < 10 || contact.length > 15) {
+                contactError.textContent = 'Enter a valid phone number (10-15 digits).';
+                contactError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                contactError.classList.add('hidden');
+            }
+
+            // If all fields are valid, submit the form
+            if (isValid) {
+                this.submit();
+            }
+        });
+    </script>
 </body>
 </html>

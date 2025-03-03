@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Listings</title>
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-gradient-to-r from-blue-500 to-indigo-600 p-4 shadow-md">
+        <div class="flex items-center justify-between container mx-auto">
+            <!-- Left side: Logo or App name -->
+            <div class="text-white text-2xl font-bold">
+                <a href="/home" class="hover:text-gray-200">Property Listings</a>
+            </div>
+            
+            <!-- Centered Menu Items -->
+            <div class="flex-1 flex justify-center space-x-8">
+                <a href="/home" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Home</a>
+                <a href="/inquiry" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Inquiry</a>
+            </div>
+
+            <!-- Right side: Logout button -->
+            <div>
+                <a href="/logout" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container mx-auto p-6 flex-grow">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Loop through properties and display them -->
+            <% properties.forEach(property => { %>
+                <div class="bg-white border rounded-lg shadow-lg overflow-hidden">
+                    <img src="<%= property.ImageURL %>" alt="<%= property.Title %>" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h2 class="text-xl font-semibold text-gray-800"><%= property.Title %></h2>
+                        <p class="text-gray-600"><%= property.Description %></p>
+                        <p class="text-gray-800 font-bold mt-2">Price: $<%= property.Price %></p>
+                        <p class="text-gray-500 mt-1">
+                            <strong>Type:</strong> <%= property.Type %><br>
+                            <strong>Location:</strong> <%= property.Location.City %>, <%= property.Location.State %>
+                        </p>
+                        <div class="mt-4 flex space-x-4">
+                            <!-- View Button -->
+                            <a href="/property/view/<%= property.PropertyID %>" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200 ease-in-out">
+                                View
+                            </a>
+                            <!-- Inquiry Button -->
+                            <a href="/property/inquiry/<%= property.PropertyID %>" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ease-in-out">
+                                Inquiry
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <!-- Footer (Optional) -->
+    <footer class="bg-blue-500 text-white text-center p-4 mt-8">
+        <p>&copy; 2025 Property Listings. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

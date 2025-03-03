@@ -10,7 +10,8 @@ import inquiryRoutes from './routes/inquiryRoutes.js';
 import sequelize from './config/database.js';
 import authLimiter from './middleware/authLimiter.js'; 
 import adminRoutes from './routes/adminRoutes.js';
-// import helmet from 'helmet';
+import userRoutes from './routes/userRoutes.js';
+import helmet from 'helmet';
 import xss from 'xss-clean';
 
 dotenv.config();
@@ -60,13 +61,19 @@ app.set('view engine', 'ejs');
 // );
 
 
+  
+
+
 // Routes
 app.use('/api/users', authLimiter , realEstateUserRoutes);
 app.use('/users', authLimiter, realEstateUserRoutes);  // Now, '/users/login' and '/users/signup' will be accessible 
 app.use('/api/properties', authLimiter, propertyRoutes);
 app.use('/api/inquiries', authLimiter, inquiryRoutes);
 
+
+
 app.use('/admin', adminRoutes);
+app.use('/user', userRoutes);
 
 // Home Route
 app.get('/', (req, res) => {

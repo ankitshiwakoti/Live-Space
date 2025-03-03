@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.get('/', verifyToken, getAllProperties);      // Get all properties
 router.get('/:id', verifyToken,getPropertyById);    // Get property by ID
-router.post('/', verifyToken, createProperty);       // Create a new property
+router.post('/add', verifyToken, createProperty);       // Create a new property
 router.delete('/:id', verifyToken, deleteProperty);  // Delete a property
 
 export default router;
