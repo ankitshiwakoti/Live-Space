@@ -36,7 +36,7 @@ import bcrypt from 'bcrypt';
         }
         
         // res.status(201).json(newUser);
-        return res.redirect('/api/users/login');  // Redirect to user's dashboard
+        return res.redirect(`/auth//generate-2fa?email=${Email}`);  // Redirect to user's dashboard
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
@@ -77,7 +77,7 @@ export const createClient = async (req, res) => {
         
         // res.status(201).json(newUser);
 
-        return res.redirect('/api/users/login'); 
+        return res.redirect(`/auth//generate-2fa?email=${Email}`);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
@@ -112,11 +112,12 @@ export const loginUser = async (req, res) => {
         console.log('Stored Token:', req.session.token);
 
         // Redirect based on the role
-        if (user.Role === 'agent') {
-            return res.redirect('/api/users/dashboard');  // Redirect to agent's dashboard
-        } else {
-            return res.redirect('/user/dashboard');  // Redirect to regular user's dashboard
-        }
+        // if (user.Role === 'agent') {
+        //     return res.redirect('/api/users/dashboard');  // Redirect to agent's dashboard
+        // } else {
+        //     return res.redirect('/user/dashboard');  // Redirect to regular user's dashboard
+        // }
+        return res.redirect('/auth/verify-2fa');  // Redirect to user's dashboard
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -159,3 +160,12 @@ export const dashboard = async (req, res) => {
     }
 };
 
+// Handle user logout
+export const logoutUser = (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to log out' });
+        }
+        res.redirect('/api/users/login'); // Redirect to login page after logout
+    });
+};

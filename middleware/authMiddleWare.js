@@ -8,7 +8,8 @@ const verifyToken = (req, res, next) => {
     console.log('Token in Session:', token);  // Check if the token is being sent with the request
 
     if (!token) {
-        return res.status(403).json({ message: 'Access Denied. No token provided.' });
+        // Render the error page or redirect to the login page
+        return res.render('error', { errorMessage: 'Access Denied. please login first.' });
     }
 
     try {
@@ -16,9 +17,10 @@ const verifyToken = (req, res, next) => {
         req.user = decoded; // Attach user data to the request object
         next();
     } catch (error) {
-        res.status(401).json({ message: 'Invalid or expired token' });
+        return res.render('error', { errorMessage: 'Access Denied. please login first.' });
     }
 };
 
 
 export default verifyToken;
+

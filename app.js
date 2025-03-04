@@ -11,6 +11,7 @@ import sequelize from './config/database.js';
 import authLimiter from './middleware/authLimiter.js'; 
 import adminRoutes from './routes/adminRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import helmet from 'helmet';
 import xss from 'xss-clean';
 
@@ -69,7 +70,7 @@ app.use('/api/users', authLimiter , realEstateUserRoutes);
 app.use('/users', authLimiter, realEstateUserRoutes);  // Now, '/users/login' and '/users/signup' will be accessible 
 app.use('/api/properties', authLimiter, propertyRoutes);
 app.use('/api/inquiries', authLimiter, inquiryRoutes);
-
+app.use('/auth',authRoutes);
 
 
 app.use('/admin', adminRoutes);
@@ -79,6 +80,12 @@ app.use('/user', userRoutes);
 app.get('/', (req, res) => {
     console.log('Root path ("/") accessed');
     res.send('Server is running!');
+});
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    const status = err.status || 500;
+    res.status(status).json({ message: err.message });
 });
 
 

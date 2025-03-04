@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Real Estate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans bg-gray-50 ">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-900 text-white p-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-3xl font-extrabold">Luxury Estates</a>
+            <ul class="flex space-x-8">
+                <li><a href="#hero" class="hover:text-yellow-500">Home</a></li>
+                <li><a href="#properties" class="hover:text-yellow-500">Properties</a></li>
+                <li><a href="#about" class="hover:text-yellow-500">About Us</a></li>
+                <li><a href="#contact" class="hover:text-yellow-500">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative h-screen bg-cover bg-center" style="background-image: url('https://www.jamesedition.com/stories/wp-content/uploads/2022/03/mansions_main_fin.jpg');">
+        <div class="absolute inset-0 bg-black opacity-40"></div>
+        <div class="relative z-10 text-center text-white py-36 px-8">
+            <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-4">Find Your Dream Home</h1>
+            <p class="text-xl md:text-2xl mb-8">Explore the finest luxury homes and estates in the world</p>
+            <a href="#properties" class="bg-yellow-500 text-gray-900 px-6 py-3 rounded-full text-xl font-semibold hover:bg-yellow-600 transition">Explore Properties</a>
+        </div>
+    </section>
+
+    <section id="properties" class="py-20 bg-gray-100 px-10">
+        <div class="container mx-auto text-center">
+            <h2 class="text-5xl font-extrabold text-gray-900 mb-12">Featured Properties</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16">
+                <!-- Property 1 -->
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+                    <img src="https://cdn.home-designing.com/wp-content/uploads/2020/04/futuristic-architecture.jpg" alt="Property 1" class="w-full h-80 object-cover transform transition duration-500 hover:scale-110">
+                    <div class="p-8">
+                        <h3 class="text-3xl font-semibold text-gray-800 hover:text-yellow-600 transition">Modern Villa</h3>
+                        <p class="text-xl font-medium text-gray-600 mt-2">$5,200,000</p>
+                        <p class="text-gray-500 mt-4">5 Beds • 6 Baths • 8,500 sq ft</p>
+                        <a href="#" class="text-yellow-500 hover:text-yellow-600 font-semibold mt-6 inline-block text-lg transition">View Details</a>
+                    </div>
+                </div>
+                <!-- Property 2 -->
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+                    <img src="https://via.placeholder.com/600x400/000000/FFFFFF/?text=Property+2" alt="Property 2" class="w-full h-80 object-cover transform transition duration-500 hover:scale-110">
+                    <div class="p-8">
+                        <h3 class="text-3xl font-semibold text-gray-800 hover:text-yellow-600 transition">Luxury Penthouse</h3>
+                        <p class="text-xl font-medium text-gray-600 mt-2">$12,000,000</p>
+                        <p class="text-gray-500 mt-4">4 Beds • 5 Baths • 6,200 sq ft</p>
+                        <a href="#" class="text-yellow-500 hover:text-yellow-600 font-semibold mt-6 inline-block text-lg transition">View Details</a>
+                    </div>
+                </div>
+                <!-- Property 3 -->
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+                    <img src="https://via.placeholder.com/600x400/000000/FFFFFF/?text=Property+3" alt="Property 3" class="w-full h-80 object-cover transform transition duration-500 hover:scale-110">
+                    <div class="p-8">
+                        <h3 class="text-3xl font-semibold text-gray-800 hover:text-yellow-600 transition">Beachfront Mansion</h3>
+                        <p class="text-xl font-medium text-gray-600 mt-2">$15,000,000</p>
+                        <p class="text-gray-500 mt-4">6 Beds • 7 Baths • 10,000 sq ft</p>
+                        <a href="#" class="text-yellow-500 hover:text-yellow-600 font-semibold mt-6 inline-block text-lg transition">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- About Us -->
+    <section id="about" class="py-20 bg-gray-200">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-extrabold mb-8">About Us</h2>
+            <p class="text-lg md:text-xl max-w-4xl mx-auto text-gray-600">
+                Luxury Estates is a premier real estate agency specializing in luxury properties. Our team of experts is dedicated to helping you find your dream home, whether you're looking for a modern villa, a luxurious penthouse, or a stunning beachfront mansion. We provide unparalleled service to ensure your experience is seamless and memorable.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Us -->
+    <section id="contact" class="py-20">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-extrabold mb-8">Contact Us</h2>
+            <p class="text-lg md:text-xl mb-8 text-gray-600">Get in touch with us for more information or to schedule a viewing.</p>
+            <a href="mailto:info@luxuryestates.com" class="bg-yellow-500 text-gray-900 px-8 py-3 rounded-full text-xl font-semibold hover:bg-yellow-600 transition">Contact Us</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 Luxury Estates. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

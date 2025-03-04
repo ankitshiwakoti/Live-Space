@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Inquiries</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+
+<div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-6">Inquiries for Your Properties</h1>
+    
+    <% properties.forEach(property => { %>
+        <div class="bg-white p-6 mb-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4"><%= property.Title %></h2>
+            <p class="text-gray-600 mb-4"><%= property.Description %></p>
+
+            <!-- Inquiry Table -->
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Inquiry ID</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Message</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Inquiry Type</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Contact Method</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Preferred Contact Time</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Email</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Move-in Timeline</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Financing Status</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Visit Date</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Additional Requests</th>
+                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% property.Inquiries.forEach(inquiry => { %>
+                        <tr class="border-t border-gray-200">
+                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.InquiryID %></td>
+                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.Message %></td>
+                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.InquiryType %></td>
+                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.ContactMethod %></td>
+                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.PreferredContactTime || 'Not Provided' %></td>
+                            <td class="px-4 py-2 text-sm text-gray-700">
+                                <a href="mailto:<%= inquiry.Email %>" class="text-blue-600 hover:underline"><%= inquiry.Email %></a>
+                            </td>
+                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.MoveInTimeline || 'Not Provided' %></td>
+                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.FinancingStatus || 'Not Provided' %></td>
+                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.VisitDate ? new Date(inquiry.VisitDate).toLocaleDateString() : 'Not Provided' %></td>
+                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.AdditionalRequests || 'No additional requests' %></td>
+                            <td class="px-4 py-2 text-sm text-gray-700">
+                                <form action="/api/inquiries/agent/inquiry/update-status/<%= inquiry.InquiryID %>" method="POST">
+                                    <select name="Status" class="px-4 py-4 text-sm text-gray-700 border border-gray-300 rounded-md">
+                                        <option value="open" <% if (inquiry.Status === 'open') { %>selected<% } %>>Open</option>
+                                        <option value="closed" <% if (inquiry.Status === 'closed') { %>selected<% } %>>Closed</option>
+                                        <option value="pending" <% if (inquiry.Status === 'pending') { %>selected<% } %>>Pending</option>
+                                    </select>
+                                    <button type="submit" class="ml-2 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md">Update</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% }) %>
+</div>
+
+</body>
+</html>
