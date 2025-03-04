@@ -20,133 +20,235 @@
             <!-- Centered Menu Items -->
             <div class="flex-1 flex justify-center space-x-8">
                 <a href="/home" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Home</a>
-                <a href="/inquiry" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Inquiry</a>
+                <a href="/api/inquiries/inquiry" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Inquiry</a>
             </div>
 
             <!-- Right side: Logout button -->
             <div>
-                <a href="/logout" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Logout</a>
+                <a href="/api/users/logout" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Logout</a>
             </div>
         </div>
     </nav>
 
-    <!-- Main content -->
-    <div class="container mx-auto p-6 flex-grow">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Loop through properties and display them -->
-            <% properties.forEach(property => { %>
-                <div class="bg-white border rounded-lg shadow-lg overflow-hidden">
-                    <img src="<%= property.ImageURL %>" alt="<%= property.Title %>" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h2 class="text-xl font-semibold text-gray-800"><%= property.Title %></h2>
-                        <p class="text-gray-600"><%= property.Description %></p>
-                        <p class="text-gray-800 font-bold mt-2">Price: $<%= property.Price %></p>
-                        <p class="text-gray-500 mt-1">
-                            <strong>Type:</strong> <%= property.Type %><br>
-                            <strong>Location:</strong> <%= property.Location.City %>, <%= property.Location.State %>
-                        </p>
-                        <div class="mt-4 flex space-x-4">
-                            <!-- View Button -->
-                            <a href="/property/view/<%= property.PropertyID %>" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200 ease-in-out">
-                                View
-                            </a>
-                            <!-- Inquiry Button -->
-                            <button onclick="openInquiryModal('<%= property.PropertyID %>', '<%= property.Title %>')" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ease-in-out">
-                                Inquiry
-                            </button>
+    <!-- Filter Section -->
+    <div class="flex mt-8">
+        <!-- Filter Panel on the Left -->
+        <div class="w-64 p-6 bg-white shadow-lg sticky top-20 rounded-lg">
+            <h3 class="text-xl font-semibold mb-6">Filters</h3>
+
+            <!-- City Filter -->
+            <div class="mb-6">
+                <label for="cityFilter" class="block text-sm font-medium mb-2">City</label>
+                <input type="text" id="cityFilter" placeholder="Enter city name" class="w-full p-2 border border-gray-300 rounded-md" oninput="applyFilters()">
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="mb-6">
+                <label for="priceRange" class="block text-sm font-medium mb-2">Max Price: $<span id="priceValue">50000000</span></label>
+                <input type="range" id="priceRange" min="1000" max="50000000" value="50000000" class="w-full" oninput="applyFilters()">
+            </div>
+         
+            <!-- Property Type Filters -->
+            <div>
+                <label class="block text-sm font-medium mb-2">Property Type</label>
+                <div class="space-y-2">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="property-type-checkbox" value="apartment" onclick="applyFilters()" class="form-checkbox">
+                        <span class="ml-2">Apartment</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="property-type-checkbox" value="commercial" onclick="applyFilters()" class="form-checkbox">
+                        <span class="ml-2">Commercial</span>
+                    </label> <br/>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="property-type-checkbox" value="house" onclick="applyFilters()" class="form-checkbox">
+                        <span class="ml-2">House</span>
+                    </label><br/>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="property-type-checkbox" value="condo" onclick="applyFilters()" class="form-checkbox">
+                        <span class="ml-2">Condo</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content (Property Listings) -->
+        <div class="container mx-auto p-6 flex-grow">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Loop through properties and display them -->
+                <% properties.forEach(property => { %>
+                    <div class="bg-white border rounded-lg shadow-lg overflow-hidden property-val" data-price="<%= property.Price %>" 
+                        data-type="<%= property.Type %>" 
+                        data-city="<%= property.Location.City %>">
+                        <img src="<%= property.ImageURL %>" alt="<%= property.Title %>" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h2 class="text-xl font-semibold text-gray-800"><%= property.Title %></h2>
+                            <p class="text-gray-600"><%= property.Description %></p>
+                            <p class="text-gray-800 font-bold mt-2">Price: $<%= property.Price %></p>
+                            <p class="text-gray-500 mt-1">
+                                <strong>Type:</strong> <%= property.Type %><br>
+                                <strong>Location:</strong> <%= property.Location.City %>, <%= property.Location.State %>
+                            </p>
+                            <div class="mt-4 flex space-x-4">
+                                <!-- View Button -->
+                                <a href="/property/view/<%= property.PropertyID %>" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200 ease-in-out">
+                                    View
+                                </a>
+                                <!-- Inquiry Button -->
+                                <button onclick="openInquiryModal('<%= property.PropertyID %>', '<%= property.Title %>')" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ease-in-out">
+                                    Inquiry
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <% }) %>
+                <% }) %>
+            </div>
         </div>
     </div>
 
-<!-- Inquiry Modal -->
-<div id="inquiryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96 relative">
-        <h2 class="text-xl font-semibold mb-4">Inquiry for <span id="propertyTitle"></span></h2>
-        <form action="/api/inquiries/inquiry" method="POST">
-            <input type="hidden" id="PropertyID" name="PropertyID">
+    <!-- Inquiry Modal -->
+    <div id="inquiryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center p-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative">
+            <h2 class="text-xl font-semibold mb-4">Inquiry for <span id="propertyTitle"></span></h2>
+            <form action="/api/inquiries/inquiry" method="POST">
+                <input type="hidden" id="PropertyID" name="PropertyID">
 
-            <!-- Message -->
-            <div class="mb-4">
-                <label class="block text-gray-700">Your Message</label>
-                <textarea name="message" rows="3" required class="w-full p-2 border rounded" placeholder="Write your questions or requirements here..."></textarea>
-            </div>
+                <!-- Message (Full Width) -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Your Message</label>
+                    <textarea name="message" rows="3" required class="w-full p-2 border rounded" placeholder="Write your questions or requirements here..."></textarea>
+                </div>
 
-            <!-- Preferred Contact Method -->
-            <div class="mb-4">
-                <label class="block text-gray-700">Preferred Contact Method</label>
-                <select name="contactMethod" class="w-full p-2 border rounded">
-                    <option value="Email">Email</option>
-                    <option value="Phone">Phone</option>
-                    <option value="WhatsApp">WhatsApp</option>
-                </select>
-            </div>
+                <!-- Two-Column Layout -->
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Inquiry Type -->
+                    <div>
+                        <label class="block text-gray-700">Inquiry Type</label>
+                        <select name="inquiryType" class="w-full p-2 border rounded">
+                            <option value="buy">Buying</option>
+                            <option value="rent">Renting</option>
+                            <option value="general">General Inquiry</option>
+                        </select>
+                    </div>
 
-            <!-- Preferred Contact Time -->
-            <div class="mb-4">
-                <label class="block text-gray-700">Preferred Contact Time</label>
-                <input type="text" name="contactTime" class="w-full p-2 border rounded" placeholder="e.g., Morning, Afternoon, Evening">
-            </div>
+                    <!-- Preferred Contact Method -->
+                    <div>
+                        <label class="block text-gray-700">Preferred Contact</label>
+                        <select name="contactMethod" class="w-full p-2 border rounded">
+                            <option value="email">Email</option>
+                            <option value="phone">Phone</option>
+                        </select>
+                    </div>
+                </div>
 
-            <!-- Move-in Timeline -->
-            <div class="mb-4">
-                <label class="block text-gray-700">Move-in Timeline</label>
-                <select name="moveInTimeline" class="w-full p-2 border rounded">
-                    <option value="Immediately">Immediately</option>
-                    <option value="1-3 Months">1-3 Months</option>
-                    <option value="3-6 Months">3-6 Months</option>
-                    <option value="6+ Months">6+ Months</option>
-                </select>
-            </div>
+                <!-- Preferred Contact Time -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Preferred Contact Time</label>
+                    <input type="text" name="contactTime" class="w-full p-2 border rounded" placeholder="e.g., Morning, Afternoon, Evening">
+                </div>
 
-            <!-- Financing Status -->
-            <div class="mb-4">
-                <label class="block text-gray-700">Financing Status</label>
-                <select name="financingStatus" class="w-full p-2 border rounded">
-                    <option value="Pre-approved">Pre-approved for Mortgage</option>
-                    <option value="Looking for Loan">Looking for Loan</option>
-                    <option value="Cash Buyer">Cash Buyer</option>
-                </select>
-            </div>
+                <!-- Two-Column Layout -->
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Move-in Timeline -->
+                    <div>
+                        <label class="block text-gray-700">Move-in Timeline</label>
+                        <select name="moveInTimeline" class="w-full p-2 border rounded">
+                            <option value="Immediately">Immediately</option>
+                            <option value="1-3 Months">1-3 Months</option>
+                            <option value="3-6 Months">3-6 Months</option>
+                            <option value="6+ Months">6+ Months</option>
+                        </select>
+                    </div>
 
-            <!-- Additional Requests -->
-            <div class="mb-4">
-                <label class="block text-gray-700">Additional Requests</label>
-                <textarea name="additionalRequests" rows="2" class="w-full p-2 border rounded" placeholder="Any special requests? (e.g., Pet-friendly, Furnished)"></textarea>
-            </div>
+                    <!-- Financing Status -->
+                    <div>
+                        <label class="block text-gray-700">Financing Status</label>
+                        <select name="financingStatus" class="w-full p-2 border rounded">
+                            <option value="Pre-approved">Pre-approved</option>
+                            <option value="Looking for Loan">Looking for Loan</option>
+                            <option value="Cash Buyer">Cash Buyer</option>
+                        </select>
+                    </div>
+                </div>
 
-            <div class="flex justify-between">
-                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
-                    Submit Inquiry
-                </button>
-                <button type="button" onclick="closeInquiryModal()" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">
-                    Close
-                </button>
-            </div>
-        </form>
+                <!-- Visit Date -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Preferred Visit Date</label>
+                    <input type="date" name="visitDate" class="w-full p-2 border rounded">
+                </div>
+
+                <!-- Additional Requests (Full Width) -->
+                <div class="mb-4">
+                    <label class="block text-gray-700">Additional Requests</label>
+                    <textarea name="additionalRequests" rows="3" class="w-full p-2 border rounded" placeholder="Any specific requests or questions?"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-6 flex justify-between items-center">
+                    <button type="button" onclick="closeInquiryModal()" class="bg-gray-400 text-white py-2 px-4 rounded-lg hover:bg-gray-500">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">
+                        Submit Inquiry
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-    <!-- Footer (Optional) -->
-    <footer class="bg-blue-500 text-white text-center p-4 mt-8">
-        <p>&copy; 2025 Property Listings. All rights reserved.</p>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+        <div class="text-center">
+            <p>&copy; 2025 Property Listings. All rights reserved.</p>
+        </div>
     </footer>
 
+    <script>
+        // Price range slider
+        document.getElementById("priceRange").addEventListener("input", function() {
+            document.getElementById("priceValue").textContent = this.value;
+            updatePriceRange();
+        });
 
-   <!-- JavaScript for Inquiry Modal -->
-<script>
-    function openInquiryModal(propertyID, propertyTitle) {
-        document.getElementById("propertyTitle").innerText = propertyTitle; // Set Property Title
-        document.getElementById("PropertyID").value = propertyID; // Corrected ID reference
-        document.getElementById("inquiryModal").classList.remove("hidden");
-    }
+        function updatePriceRange() {
+            let priceRange = document.getElementById("priceRange").value;
+            document.getElementById("priceRangeValue").textContent = `$0 - $${priceRange}`;
+        }
 
-    function closeInquiryModal() {
-        document.getElementById("inquiryModal").classList.add("hidden");
-    }
-</script>
+        // Filter logic (Apply filters based on user selection)
+        function applyFilters() {
+            let city = document.getElementById("cityFilter").value.toLowerCase();
+            let priceRange = document.getElementById("priceRange").value;
+            let propertyTypes = Array.from(document.querySelectorAll(".property-type-checkbox:checked")).map(checkbox => checkbox.value);
 
+            let properties = document.querySelectorAll('.property-val');
+            properties.forEach(property => {
+                let price = property.getAttribute('data-price');
+                let type = property.getAttribute('data-type').toLowerCase();
+                let cityValue = property.getAttribute('data-city').toLowerCase();
+
+                if (
+                    (price <= priceRange) &&
+                    (cityValue.includes(city) || city === '') &&
+                    (propertyTypes.length === 0 || propertyTypes.includes(type))
+                ) {
+                    property.style.display = 'block';
+                } else {
+                    property.style.display = 'none';
+                }
+            });
+        }
+
+        // Inquiry Modal open/close logic
+        function openInquiryModal(propertyID, propertyTitle) {
+            document.getElementById('inquiryModal').classList.remove('hidden');
+            document.getElementById('PropertyID').value = propertyID;
+            document.getElementById('propertyTitle').textContent = propertyTitle;
+        }
+
+        function closeInquiryModal() {
+            document.getElementById('inquiryModal').classList.add('hidden');
+        }
+    </script>
 </body>
 </html>

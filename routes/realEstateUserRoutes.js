@@ -1,5 +1,5 @@
 import express from 'express';
-import { createClient,createAgent, loginUser, dashboard } from '../controller/RealEstateUserController.js';
+import { createClient,createAgent, loginUser, dashboard,logoutUser } from '../controller/RealEstateUserController.js';
 import verifyToken from '../middleware/authMiddleWare.js';
 import { validateAgentSignup } from '../middleware/validationMiddleware.js';
 
@@ -33,4 +33,11 @@ router.get('/profile', verifyToken, (req, res) => {
 router.post('/signupagent',validateAgentSignup, createAgent);
 router.post('/signupclient', createClient);
 
+// Logout route to handle user logout
+router.get('/logout', logoutUser);
+
+// Render landing page
+router.get('/landing', (req, res) => {
+    res.render('landing');
+});
 export default router;
