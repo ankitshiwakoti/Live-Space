@@ -7,64 +7,105 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50">
 
-<div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-6">Inquiries for Your Properties</h1>
-    
-    <% properties.forEach(property => { %>
-        <div class="bg-white p-6 mb-6 rounded-lg shadow-lg">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4"><%= property.Title %></h2>
-            <p class="text-gray-600 mb-4"><%= property.Description %></p>
-
-            <!-- Inquiry Table -->
-            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Inquiry ID</th>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Message</th>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Inquiry Type</th>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Contact Method</th>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Preferred Contact Time</th>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Email</th>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Move-in Timeline</th>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Financing Status</th>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Visit Date</th>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Additional Requests</th>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% property.Inquiries.forEach(inquiry => { %>
-                        <tr class="border-t border-gray-200">
-                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.InquiryID %></td>
-                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.Message %></td>
-                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.InquiryType %></td>
-                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.ContactMethod %></td>
-                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.PreferredContactTime || 'Not Provided' %></td>
-                            <td class="px-4 py-2 text-sm text-gray-700">
-                                <a href="mailto:<%= inquiry.Email %>" class="text-blue-600 hover:underline"><%= inquiry.Email %></a>
-                            </td>
-                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.MoveInTimeline || 'Not Provided' %></td>
-                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.FinancingStatus || 'Not Provided' %></td>
-                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.VisitDate ? new Date(inquiry.VisitDate).toLocaleDateString() : 'Not Provided' %></td>
-                            <td class="px-4 py-2 text-sm text-gray-700"><%= inquiry.AdditionalRequests || 'No additional requests' %></td>
-                            <td class="px-4 py-2 text-sm text-gray-700">
-                                <form action="/api/inquiries/agent/inquiry/update-status/<%= inquiry.InquiryID %>" method="POST">
-                                    <select name="Status" class="px-4 py-4 text-sm text-gray-700 border border-gray-300 rounded-md">
-                                        <option value="open" <% if (inquiry.Status === 'open') { %>selected<% } %>>Open</option>
-                                        <option value="closed" <% if (inquiry.Status === 'closed') { %>selected<% } %>>Closed</option>
-                                        <option value="pending" <% if (inquiry.Status === 'pending') { %>selected<% } %>>Pending</option>
-                                    </select>
-                                    <button type="submit" class="ml-2 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md">Update</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+<div class="flex h-screen">
+    <!-- Sidebar -->
+    <div class="w-64 bg-gray-800 text-white flex flex-col">
+        <div class="p-4 text-2xl font-semibold border-b border-gray-700">
+            Admin Panel
         </div>
-    <% }) %>
+        <nav class="flex-1 p-4">
+            <ul>
+                <li>
+                    <a href="/admin/dashboard" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700">
+                        <i class="fa-solid fa-chart-line mr-3"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/properties/add" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700">
+                        <i class="fa-solid fa-building mr-3"></i> Properties
+                    </a>
+                </li>
+                <li>
+                    <a href="/api/inquiries/agent/inquiry" class="flex items-center px-4 py-3 rounded-lg bg-gray-700">
+                        <i class="fa-solid fa-users mr-3"></i> Inquiries
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="p-4 border-t border-gray-700">
+            <a href="/api/users/logout" class="flex items-center px-4 py-3 rounded-lg hover:bg-red-600">
+                <i class="fa-solid fa-sign-out-alt mr-3"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col">
+        <!-- Top Navbar -->
+        <div class="bg-white shadow-md p-6 flex justify-between items-center border-b border-gray-200">
+            <h2 class="text-2xl font-semibold text-gray-700">Inquiries</h2>
+            <a href="/admin/properties/add" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300">
+                <i class="fa-solid fa-plus mr-2"></i> Add Property
+            </a>
+        </div>
+        
+        <div class="container mx-auto p-8">
+            <% properties.forEach(property => { %>
+                <div class="bg-white p-8 mb-8 rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4"> Property Name: <%= property.Title %></h2>
+
+                    <!-- Inquiry Table -->
+                    <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Inquiry ID</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Message</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Inquiry Type</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Contact Method</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Preferred Contact Time</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Move-in Timeline</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Financing Status</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Visit Date</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Additional Requests</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% property.Inquiries.forEach(inquiry => { %>
+                                <tr class="border-t border-gray-200">
+                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.InquiryID %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.Message %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.InquiryType %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.ContactMethod %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.PreferredContactTime || 'Not Provided' %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        <a href="mailto:<%= inquiry.Email %>" class="text-blue-600 hover:underline"><%= inquiry.Email %></a>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.MoveInTimeline || 'Not Provided' %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.FinancingStatus || 'Not Provided' %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.VisitDate ? new Date(inquiry.VisitDate).toLocaleDateString() : 'Not Provided' %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.AdditionalRequests || 'No additional requests' %></td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        <form action="/api/inquiries/agent/inquiry/update-status/<%= inquiry.InquiryID %>" method="POST">
+                                            <select name="Status" class="px-6 py-2 text-sm text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                                <option value="open" <% if (inquiry.Status === 'open') { %>selected<% } %>>Open</option>
+                                                <option value="closed" <% if (inquiry.Status === 'closed') { %>selected<% } %>>Closed</option>
+                                                <option value="pending" <% if (inquiry.Status === 'pending') { %>selected<% } %>>Pending</option>
+                                            </select>
+                                            <button type="submit" class="ml-4 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md focus:outline-none transition duration-200">Update</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% }) %>
+        </div>
+    </div>
 </div>
 
 </body>

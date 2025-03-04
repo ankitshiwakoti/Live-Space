@@ -6,27 +6,43 @@
     <title>Property Listings</title>
     <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    
 </head>
 <body class="bg-gray-100 flex flex-col min-h-screen">
 
     <!-- Navbar -->
-    <nav class="bg-gradient-to-r from-blue-500 to-indigo-600 p-4 shadow-md">
+    <nav class="bg-gray-900 text-white p-6">
         <div class="flex items-center justify-between container mx-auto">
+             <!-- Logo (on the left) -->
+             <a href="#" class="text-3xl font-extrabold">Luxury Estates</a>
             <!-- Left side: Logo or App name -->
-            <div class="text-white text-2xl font-bold">
+            <!-- <div class="text-white text-2xl font-bold">
                 <a href="/home" class="hover:text-gray-200">Property Listings</a>
-            </div>
+            </div> -->
+            <ul class="flex space-x-8 mx-auto">
+                <li><a href="#hero" class="hover:text-yellow-500">Home</a></li>
+                <li><a href="#properties" class="hover:text-yellow-500">Properties</a></li>
+                <li><a href="/api/inquiries/inquiry" class="hover:text-yellow-500">My Inquries</a></li>
+                <!-- <li><a href="#contact" class="hover:text-yellow-500">Contact</a></li> -->
+            </ul>
             
             <!-- Centered Menu Items -->
-            <div class="flex-1 flex justify-center space-x-8">
+            <!-- <div class="flex-1 flex justify-center space-x-8">
                 <a href="/home" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Home</a>
                 <a href="/api/inquiries/inquiry" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Inquiry</a>
-            </div>
+            </div> -->
 
             <!-- Right side: Logout button -->
-            <div>
-                <a href="/api/users/logout" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Logout</a>
+
+            <div class="flex space-x-4">
+                <i class="fas fa-user-circle text-2xl"></i>
+                <a href="/api/users/logout" class="hover:text-yellow-500">Logout</a>
+                <!-- <a href="#signup" class="hover:text-yellow-500">Signup</a> -->
             </div>
+            <!-- <div>
+                <a href="/api/users/logout" class="text-white text-lg hover:text-gray-300 transition duration-200 ease-in-out">Logout</a>
+            </div> -->
         </div>
     </nav>
 
@@ -34,7 +50,7 @@
     <div class="flex mt-8">
         <!-- Filter Panel on the Left -->
         <div class="w-64 p-6 bg-white shadow-lg sticky top-20 rounded-lg">
-            <h3 class="text-xl font-semibold mb-6">Filters</h3>
+            <h3 class="text-2xl font-semibold mb-6">Filters</h3>
 
             <!-- City Filter -->
             <div class="mb-6">
@@ -44,7 +60,7 @@
 
             <!-- Price Range Filter -->
             <div class="mb-6">
-                <label for="priceRange" class="block text-sm font-medium mb-2">Max Price: $<span id="priceValue">50000000</span></label>
+                <label for="priceRange" class="block  text-sm font-medium mb-2">Max Price: $<span id="priceValue">50000000</span></label>
                 <input type="range" id="priceRange" min="1000" max="50000000" value="50000000" class="w-full" oninput="applyFilters()">
             </div>
          
@@ -169,7 +185,7 @@
                             <option value="Cash Buyer">Cash Buyer</option>
                         </select>
                     </div>
-                </div>
+                </div> 
 
                 <!-- Visit Date -->
                 <div class="mb-4">
