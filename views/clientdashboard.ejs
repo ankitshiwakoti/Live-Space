@@ -127,6 +127,7 @@
         <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative">
             <h2 class="text-xl font-semibold mb-4">Inquiry for <span id="propertyTitle"></span></h2>
             <form action="/api/inquiries/inquiry" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <input type="hidden" id="PropertyID" name="PropertyID">
 
                 <!-- Message (Full Width) -->

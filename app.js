@@ -12,6 +12,7 @@ import authLimiter from './middleware/authLimiter.js';
 import adminRoutes from './routes/adminRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import csrf from 'csurf';
 import helmet from 'helmet';
 import xss from 'xss-clean';
 
@@ -38,6 +39,17 @@ app.use(session({
     saveUninitialized: true,
     cookie: { httpOnly: true, secure: process.env.NODE_ENV === 'production' }
 }));
+
+
+// Initialize CSRF protection
+const csrfProtection = csrf();
+app.use(csrfProtection);
+
+// Pass CSRF token to all views
+app.use((req, res, next) => {
+    res.locals.csrfToken = req.csrfToken();  // Generates CSRF token
+    next();
+});
 
 // Apply xss-clean to sanitize incoming data
 app.use(xss());

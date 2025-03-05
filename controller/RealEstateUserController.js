@@ -12,7 +12,7 @@ import bcrypt from 'bcrypt';
         const user = await RealEstateUser.findOne({ where: { Email: Email } });
 
         if (user) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.render('signupagent', { errorMessage: 'User already exists', formData: req.body });
         }
 
         // Hash password
@@ -39,7 +39,10 @@ import bcrypt from 'bcrypt';
         return res.redirect(`/auth//generate-2fa?email=${Email}`);  // Redirect to user's dashboard
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        res.render('signupagent', { 
+            errorMessage: 'An error occurred. Please try again.', 
+            formData: req.body 
+        });
     }
 };
 
@@ -52,7 +55,7 @@ export const createClient = async (req, res) => {
         const user = await RealEstateUser.findOne({ where: { Email: Email } });
 
         if (user) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.render('signup', { errorMessage: 'User already exists', formData: req.body });
         }
 
         // Hash password
@@ -80,7 +83,9 @@ export const createClient = async (req, res) => {
         return res.redirect(`/auth//generate-2fa?email=${Email}`);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: error.message });
+        if (user) {
+            return res.render('signupagent', { errorMessage: 'An error occurred. Please try again.', formData: req.body });
+        }
     }
 };
 
@@ -91,7 +96,7 @@ export const loginUser = async (req, res) => {
         const user = await RealEstateUser.findOne({ where: { Email: email } });
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.render('login', { errorMessage: 'User not found', formData: req.body });
         }
 
         // Check password using bcrypt
@@ -119,7 +124,7 @@ export const loginUser = async (req, res) => {
         // }
         return res.redirect('/auth/verify-2fa');  // Redirect to user's dashboard
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.render('login', { errorMessage: error.message, formData: req.body });
     }
 };
 

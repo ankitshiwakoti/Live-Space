@@ -13,6 +13,7 @@
         <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
             <!-- Form to verify the 2FA token -->
             <form action="/auth/verify-2fa" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="mb-4">
                     <label for="token" class="block text-sm font-semibold text-gray-700">Enter the code from your Authenticator App:</label>
                     <input type="text" name="token" id="token" required class="mt-2 p-2 w-full border border-gray-300 rounded-lg" />

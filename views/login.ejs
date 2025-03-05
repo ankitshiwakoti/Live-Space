@@ -13,17 +13,24 @@
         <div class="bg-white p-8 rounded-lg shadow-lg w-96">
             <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
             <form id="login-form" action="/api/users/login" method="POST">
+                <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+                    <div class="alert alert-danger text-red-500 font-bold"><%= errorMessage %></div>
+                <% } %>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-600">Email</label>
                     <input type="email" id="email" name="email" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                    <p id="email-error" class="text-red-500 text-sm mt-1 hidden">Invalid email format.</p>
                 </div>
                 <div class="mb-6">
                     <label for="password" class="block text-sm font-medium text-gray-600">Password</label>
                     <input type="password" id="password" name="password" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                    <p id="password-error" class="text-red-500 text-sm mt-1 hidden">
+                        Password must be at least 8 characters, include an uppercase letter, a lowercase letter, a number, and a special character.
+                    </p>
                 </div>
                 <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Login</button>
             </form>
-            <!-- <p class="mt-4 text-center">Don't have an account? <a href="/api/users/signup" class="text-blue-500">Sign up</a></p> -->
 
             <p class="mt-4 text-center">
                 Don't have an account? 
@@ -32,5 +39,39 @@
             </p>
         </div>
     </div>
+
+    <script>
+        document.getElementById("login-form").addEventListener("submit", function (event) {
+            let isValid = true;
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const emailError = document.getElementById("email-error");
+            const passwordError = document.getElementById("password-error");
+
+            // Email regex validation
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(email)) {
+                emailError.classList.remove("hidden");
+                isValid = false;
+            } else {
+                emailError.classList.add("hidden");
+            }
+
+            // Password regex validation
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                passwordError.classList.remove("hidden");
+                isValid = false;
+            } else {
+                passwordError.classList.add("hidden");
+            }
+
+            // Prevent form submission if validation fails
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>

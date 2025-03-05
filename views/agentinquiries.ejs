@@ -18,7 +18,7 @@
         <nav class="flex-1 p-4">
             <ul>
                 <li>
-                    <a href="/admin/dashboard" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700">
+                    <a href="/users/dashboard" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700">
                         <i class="fa-solid fa-chart-line mr-3"></i> Dashboard
                     </a>
                 </li>
@@ -50,7 +50,7 @@
                 <i class="fa-solid fa-plus mr-2"></i> Add Property
             </a>
         </div>
-        
+
         <div class="container mx-auto p-8">
             <% properties.forEach(property => { %>
                 <div class="bg-white p-8 mb-8 rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300">
@@ -60,43 +60,43 @@
                     <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Inquiry ID</th>
-                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Message</th>
                                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Inquiry Type</th>
                                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Contact Method</th>
-                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Preferred Contact Time</th>
                                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
-                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Move-in Timeline</th>
-                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Financing Status</th>
-                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Visit Date</th>
-                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Additional Requests</th>
                                 <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <% property.Inquiries.forEach(inquiry => { %>
                                 <tr class="border-t border-gray-200">
-                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.InquiryID %></td>
-                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.Message %></td>
                                     <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.InquiryType %></td>
                                     <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.ContactMethod %></td>
-                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.PreferredContactTime || 'Not Provided' %></td>
                                     <td class="px-6 py-4 text-sm text-gray-700">
                                         <a href="mailto:<%= inquiry.Email %>" class="text-blue-600 hover:underline"><%= inquiry.Email %></a>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.MoveInTimeline || 'Not Provided' %></td>
-                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.FinancingStatus || 'Not Provided' %></td>
-                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.VisitDate ? new Date(inquiry.VisitDate).toLocaleDateString() : 'Not Provided' %></td>
-                                    <td class="px-6 py-4 text-sm text-gray-700"><%= inquiry.AdditionalRequests || 'No additional requests' %></td>
                                     <td class="px-6 py-4 text-sm text-gray-700">
                                         <form action="/api/inquiries/agent/inquiry/update-status/<%= inquiry.InquiryID %>" method="POST">
-                                            <select name="Status" class="px-6 py-2 text-sm text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <select name="Status" class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                              
                                                 <option value="open" <% if (inquiry.Status === 'open') { %>selected<% } %>>Open</option>
                                                 <option value="closed" <% if (inquiry.Status === 'closed') { %>selected<% } %>>Closed</option>
                                                 <option value="pending" <% if (inquiry.Status === 'pending') { %>selected<% } %>>Pending</option>
                                             </select>
-                                            <button type="submit" class="ml-4 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md focus:outline-none transition duration-200">Update</button>
+                                            <button type="submit" class="ml-2 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition duration-200">Update</button>
                                         </form>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        <button class="view-btn px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200"
+                                            data-message="<%= inquiry.Message %>"
+                                            data-preferred-time="<%= inquiry.PreferredContactTime || 'Not Provided' %>"
+                                            data-move-in="<%= inquiry.MoveInTimeline || 'Not Provided' %>"
+                                            data-financing="<%= inquiry.FinancingStatus || 'Not Provided' %>"
+                                            data-visit-date="<%= inquiry.VisitDate ? new Date(inquiry.VisitDate).toLocaleDateString() : 'Not Provided' %>"
+                                            data-requests="<%= inquiry.AdditionalRequests || 'No additional requests' %>">
+                                            <i class="fa-solid fa-eye"></i> View
+                                        </button>
                                     </td>
                                 </tr>
                             <% }) %>
@@ -107,6 +107,45 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<!-- Modal -->
+<div id="inquiryModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white w-2/3 max-h-[80vh] overflow-y-auto p-6 rounded-lg shadow-xl">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Inquiry Details</h2>
+        <div class="space-y-3 text-gray-700">
+            <p><strong>Message:</strong> <span id="modalMessage"></span></p>
+            <p><strong>Preferred Contact Time:</strong> <span id="modalPreferredTime"></span></p>
+            <p><strong>Move-in Timeline:</strong> <span id="modalMoveIn"></span></p>
+            <p><strong>Financing Status:</strong> <span id="modalFinancing"></span></p>
+            <p><strong>Visit Date:</strong> <span id="modalVisitDate"></span></p>
+            <p><strong>Additional Requests:</strong> <span id="modalRequests"></span></p>
+        </div>
+        <div class="flex justify-end mt-6">
+            <button id="closeModal" class="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.view-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        document.getElementById('modalMessage').textContent = button.dataset.message;
+        document.getElementById('modalPreferredTime').textContent = button.dataset.preferredTime;
+        document.getElementById('modalMoveIn').textContent = button.dataset.moveIn;
+        document.getElementById('modalFinancing').textContent = button.dataset.financing;
+        document.getElementById('modalVisitDate').textContent = button.dataset.visitDate;
+        document.getElementById('modalRequests').textContent = button.dataset.requests;
+        document.getElementById('inquiryModal').classList.remove('hidden');
+    });
+});
+document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('inquiryModal').classList.add('hidden');
+});
+</script>
+
 
 </body>
 </html>

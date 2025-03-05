@@ -15,6 +15,7 @@
 
             <form action="/admin/properties/edit/<%= property.PropertyID %>" method="POST" class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto space-y-6">
                 <!-- Property Details -->
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div>
                     <h3 class="text-lg font-semibold text-gray-700 mb-2">Property Details</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

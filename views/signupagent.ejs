@@ -12,6 +12,11 @@
         <div class="bg-white p-8 rounded-lg shadow-lg w-96">
             <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
             <form id="signupForm" action="/api/users/signupagent" method="POST">
+                
+                <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+                    <div class="alert alert-danger text-red-500 font-bold"><%= errorMessage %></div>
+                <% } %>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-600">Name</label>
                     <input type="text" id="name" name="Name" class="w-full p-2 border border-gray-300 rounded mt-1" required>
@@ -83,8 +88,9 @@
             // Password validation
             const password = document.getElementById('password').value;
             const passwordError = document.getElementById('passwordError');
-            if (password.length < 6) {
-                passwordError.textContent = 'Password must be at least 6 characters.';
+            const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$/;
+            if (!passwordPattern.test(password)) {
+                passwordError.textContent = 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.';
                 passwordError.classList.remove('hidden');
                 isValid = false;
             } else {
