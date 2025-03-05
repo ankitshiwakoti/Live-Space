@@ -49,14 +49,16 @@ export const verify2FA = async (req, res) => {
         const user = await RealEstateUser.findOne({ where: { Email: email } });
 
         if (!user || !user.TwoFASecret) {
-            return res.status(400).json({ message: '2FA secret not set up.' });
+            // return res.status(400).json({ message: '2FA secret not set up.' });
+            return res.render('error', { errorMessage: '2FA secret not set up.' });
         }
 
         // Get the 2FA token entered by the user from the request body
         const userToken = req.body.token;  // Assuming the token is sent in the body of the request
 
         if (!userToken) {
-            return res.status(400).json({ message: '2FA token is required.' });
+           // return res.status(400).json({ message: '2FA token is required.' });
+            return res.render('error', { errorMessage: '2FA token is required.' });
         }
 
         // Verify the entered token using the user's secret
@@ -83,7 +85,9 @@ export const verify2FA = async (req, res) => {
         }
     } catch (error) {
         console.error('Error verifying 2FA:', error);
-        res.status(500).json({ message: 'Error verifying 2FA.' });
+        // res.status(500).json({ message: 'Error verifying 2FA.' });
+        return res.render('error', { errorMessage: 'Error verifying 2FA.' });
+        
     }
 };
 

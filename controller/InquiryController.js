@@ -100,7 +100,8 @@ export const createInquiry = async (req, res) => {
             Status: 'open'
         });
 
-        res.status(201).json({ message: 'Inquiry submitted successfully', inquiry: newInquiry });
+        // res.status(201).json({ message: 'Inquiry submitted successfully', inquiry: newInquiry });
+        res.redirect('/api/inquiries/inquiry');
     } catch (error) {
         console.error('Error submitting inquiry:', error);
         res.status(500).json({ error: 'Internal Server Error' });

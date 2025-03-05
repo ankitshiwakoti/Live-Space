@@ -13,7 +13,7 @@ router.post('/verify-2fa', verify2FA);
 router.get('/verify-2fa',renderVerify2FA);
 
 router.get('/done', (req, res) => {
-    res.render('api/users/login');
+    res.render('login');
 });
 
 export default router;
